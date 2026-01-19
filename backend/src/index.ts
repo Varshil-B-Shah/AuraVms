@@ -346,13 +346,14 @@ app.get("/api/email/approve", async (req: Request, res: Response) => {
 
     const updatedSubmission = workflow.approveSubmission(submissionId);
 
+    // Send confirmation email asynchronously
     if (process.env.FROM_EMAIL) {
-      try {
-        await emailService.sendApprovalConfirmationEmail(
-          updatedSubmission,
-          process.env.FROM_EMAIL,
-        );
-      } catch (emailError) {}
+      emailService.sendApprovalConfirmationEmail(
+        updatedSubmission,
+        process.env.FROM_EMAIL,
+      ).catch((emailError) => {
+        console.error("Failed to send approval confirmation email:", emailError);
+      });
     }
 
     res.send(`
@@ -477,13 +478,14 @@ app.get("/api/email/reject", async (req: Request, res: Response) => {
 
     const updatedSubmission = workflow.rejectSubmission(submissionId);
 
+    // Send rejection email asynchronously
     if (process.env.FROM_EMAIL) {
-      try {
-        await emailService.sendRejectionEmail(
-          updatedSubmission,
-          process.env.FROM_EMAIL,
-        );
-      } catch (emailError) {}
+      emailService.sendRejectionEmail(
+        updatedSubmission,
+        process.env.FROM_EMAIL,
+      ).catch((emailError) => {
+        console.error("Failed to send rejection email:", emailError);
+      });
     }
 
     res.send(`
@@ -655,21 +657,25 @@ app.post(
         writerEmail,
       );
 
+      // Send email asynchronously (fire-and-forget) to avoid blocking the response
       const managerEmail = process.env.MANAGER_EMAIL;
       if (managerEmail) {
-        try {
-          const approveToken = generateEmailToken(submission.id, "approve");
-          const rejectToken = generateEmailToken(submission.id, "reject");
+        const approveToken = generateEmailToken(submission.id, "approve");
+        const rejectToken = generateEmailToken(submission.id, "reject");
 
-          await emailService.sendApprovalEmailWithTokens(
-            submission,
-            managerEmail,
-            approveToken,
-            rejectToken,
-          );
-        } catch (emailError) {}
+        // Don't await - send email in background
+        emailService.sendApprovalEmailWithTokens(
+          submission,
+          managerEmail,
+          approveToken,
+          rejectToken,
+        ).catch((emailError) => {
+          console.error("Failed to send approval email:", emailError);
+          // Email failure doesn't affect submission success
+        });
       }
 
+      // Respond immediately without waiting for email
       res.status(201).json({
         success: true,
         message: "Submission created successfully",
@@ -841,13 +847,14 @@ app.get(
 
       const updatedSubmission = workflow.approveSubmission(postId);
 
+      // Send confirmation email asynchronously
       if (process.env.FROM_EMAIL) {
-        try {
-          await emailService.sendApprovalConfirmationEmail(
-            updatedSubmission,
-            process.env.FROM_EMAIL,
-          );
-        } catch (emailError) {}
+        emailService.sendApprovalConfirmationEmail(
+          updatedSubmission,
+          process.env.FROM_EMAIL,
+        ).catch((emailError) => {
+          console.error("Failed to send approval confirmation email:", emailError);
+        });
       }
 
       res.json({
@@ -887,13 +894,14 @@ app.get(
 
       const updatedSubmission = workflow.rejectSubmission(postId);
 
+      // Send rejection email asynchronously
       if (process.env.FROM_EMAIL) {
-        try {
-          await emailService.sendRejectionEmail(
-            updatedSubmission,
-            process.env.FROM_EMAIL,
-          );
-        } catch (emailError) {}
+        emailService.sendRejectionEmail(
+          updatedSubmission,
+          process.env.FROM_EMAIL,
+        ).catch((emailError) => {
+          console.error("Failed to send rejection email:", emailError);
+        });
       }
 
       res.json({
