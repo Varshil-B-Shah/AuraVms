@@ -110,7 +110,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const uploadsDir = path.join(__dirname, "..", "uploads");
+// Use /tmp on Vercel (serverless), local uploads directory in development
+const uploadsDir = process.env.NODE_ENV === 'production'
+  ? path.join('/tmp', 'uploads')
+  : path.join(__dirname, "..", "uploads");
+  
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }

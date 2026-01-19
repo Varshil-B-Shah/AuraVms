@@ -2,7 +2,11 @@ import fs from "fs";
 import path from "path";
 import { Submission, SubmissionStatus } from "../../types";
 
-const DATA_FILE = path.join(process.cwd(), "data", "submissions.json");
+// Use /tmp on Vercel (serverless), local data directory in development
+const DATA_DIR = process.env.NODE_ENV === 'production' 
+  ? '/tmp' 
+  : path.join(process.cwd(), "data");
+const DATA_FILE = path.join(DATA_DIR, "submissions.json");
 
 export class Storage {
   constructor() {
