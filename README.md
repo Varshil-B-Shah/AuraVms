@@ -41,7 +41,7 @@ A full-stack document approval workflow system built with Next.js, Express.js, a
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
-cd "Internship Assignment"
+cd "AuraVms"
 ```
 
 ### 2. Backend Setup
@@ -176,7 +176,7 @@ npm run test:coverage   # Coverage report
 ## 📁 Project Structure
 
 ```
-Internship Assignment/
+AuraVms/
 ├── backend/
 │   ├── src/
 │   │   ├── modules/
@@ -332,14 +332,6 @@ curl -X POST http://localhost:3001/api/submit \
 - [ ] Advanced search and filtering
 - [ ] Analytics dashboard
 - [ ] Email templates customization
-
-## 📄 License
-
-This project is created for internship assignment purposes.
-
-## 👤 Author
-
-Developed as part of an internship assignment to demonstrate full-stack development skills with modern web technologies.
 
 ## 🙏 Acknowledgments
 
