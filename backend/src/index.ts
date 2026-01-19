@@ -969,23 +969,35 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   });
 });
 
-const server = app.listen(PORT, async () => {
-  try {
-    await emailService.verifyConnection();
-  } catch (error) {}
-});
+// Only run the server in local development (not on Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  const server = app.listen(PORT, async () => {
+    console.log(`Server running on ${BASE_URL}`);
+    try {
+      await emailService.verifyConnection();
+      console.log('Email service connected');
+    } catch (error) {
+      console.error('Email service connection failed:', error);
+    }
+  });
 
-const gracefulShutdown = async () => {
-  server.close(() => {});
+  const gracefulShutdown = async () => {
+    console.log('Shutting down gracefully...');
+    server.close(() => {
+      console.log('Server closed');
+    });
 
-  try {
-    await emailService.close();
-  } catch (error) {}
+    try {
+      await emailService.close();
+    } catch (error) {
+      console.error('Error closing email service:', error);
+    }
 
-  process.exit(0);
-};
+    process.exit(0);
+  };
 
-process.on("SIGTERM", gracefulShutdown);
-process.on("SIGINT", gracefulShutdown);
+  process.on("SIGTERM", gracefulShutdown);
+  process.on("SIGINT", gracefulShutdown);
+}
 
 export default app;
