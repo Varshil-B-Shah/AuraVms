@@ -352,10 +352,10 @@ app.get("/api/email/approve", async (req: Request, res: Response) => {
     const updatedSubmission = workflow.approveSubmission(submissionId);
 
     // Send confirmation email asynchronously
-    if (process.env.FROM_EMAIL) {
+    if (process.env.WRITER_EMAIL) {
       emailService.sendApprovalConfirmationEmail(
         updatedSubmission,
-        process.env.FROM_EMAIL,
+        process.env.WRITER_EMAIL,
       ).catch((emailError) => {
         console.error("Failed to send approval confirmation email:", emailError);
       });
@@ -484,10 +484,10 @@ app.get("/api/email/reject", async (req: Request, res: Response) => {
     const updatedSubmission = workflow.rejectSubmission(submissionId);
 
     // Send rejection email asynchronously
-    if (process.env.FROM_EMAIL) {
+    if (process.env.WRITER_EMAIL) {
       emailService.sendRejectionEmail(
         updatedSubmission,
-        process.env.FROM_EMAIL,
+        process.env.WRITER_EMAIL,
       ).catch((emailError) => {
         console.error("Failed to send rejection email:", emailError);
       });
@@ -853,10 +853,10 @@ app.get(
       const updatedSubmission = workflow.approveSubmission(postId);
 
       // Send confirmation email asynchronously
-      if (process.env.FROM_EMAIL) {
+      if (process.env.WRITER_EMAIL) {
         emailService.sendApprovalConfirmationEmail(
           updatedSubmission,
-          process.env.FROM_EMAIL,
+          process.env.WRITER_EMAIL,
         ).catch((emailError) => {
           console.error("Failed to send approval confirmation email:", emailError);
         });
@@ -900,10 +900,10 @@ app.get(
       const updatedSubmission = workflow.rejectSubmission(postId);
 
       // Send rejection email asynchronously
-      if (process.env.FROM_EMAIL) {
+      if (process.env.WRITER_EMAIL) {
         emailService.sendRejectionEmail(
           updatedSubmission,
-          process.env.FROM_EMAIL,
+          process.env.WRITER_EMAIL,
         ).catch((emailError) => {
           console.error("Failed to send rejection email:", emailError);
         });
