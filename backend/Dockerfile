@@ -3,17 +3,20 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json ./
+COPY package.json ./
 COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --omit=dev && npm cache clean --force
+# Install all dependencies (including dev for build)
+RUN npm install && npm cache clean --force
 
 # Copy source code
 COPY src ./src
 
 # Build TypeScript
 RUN npm run build
+
+# Remove dev dependencies
+RUN npm prune --omit=dev
 
 # Create data directory
 RUN mkdir -p /app/data /app/uploads
