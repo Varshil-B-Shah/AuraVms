@@ -42,7 +42,15 @@ export class EmailService {
     this.fromName = process.env.FROM_NAME || "Document Approval System";
     this.baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
-    this.transporter = nodemailer.createTransport(emailConfig);
+    this.transporter = nodemailer.createTransport({
+      ...emailConfig,
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
+      socketTimeout: 30000, // 30 seconds
+      pool: true, // Use connection pooling
+      maxConnections: 5,
+      maxMessages: 100,
+    });
   }
 
   async verifyConnection(): Promise<boolean> {

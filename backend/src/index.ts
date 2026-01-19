@@ -11,6 +11,7 @@ import { parseDocument } from "./modules/parser/parser";
 import { WorkflowManager } from "./modules/workflow/workflow";
 import { Storage } from "./modules/storage/storage";
 import { EmailService } from "./modules/emailer/emailer";
+import { ResendEmailService } from "./modules/emailer/resend-emailer";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -86,15 +87,19 @@ declare global {
 
 const storage = new Storage();
 const workflow = new WorkflowManager(storage);
-const emailService = new EmailService({
-  host: process.env.SMTP_HOST || "smtp.gmail.com",
-  port: parseInt(process.env.SMTP_PORT || "587"),
-  secure: process.env.SMTP_SECURE === "true",
-  auth: {
-    user: process.env.SMTP_USER || "",
-    pass: process.env.SMTP_PASS || "",
-  },
-});
+
+// Use Resend if API key is available (recommended for production), otherwise fall back to SMTP
+const emailService = process.env.RESEND_API_KEY
+  ? new ResendEmailService(process.env.RESEND_API_KEY)
+  : new EmailService({
+      host: process.env.SMTP_HOST || "smtp.gmail.com",
+      port: parseInt(process.env.SMTP_PORT || "587"),
+      secure: process.env.SMTP_SECURE === "true",
+      auth: {
+        user: process.env.SMTP_USER || "",
+        pass: process.env.SMTP_PASS || "",
+      },
+    });
 
 const app = express();
 
@@ -1003,12 +1008,6 @@ if (process.env.NODE_ENV !== 'production') {
     server.close(() => {
       console.log('Server closed');
     });
-
-    try {
-      await emailService.close();
-    } catch (error) {
-      console.error('Error closing email service:', error);
-    }
 
     process.exit(0);
   };
