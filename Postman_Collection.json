@@ -1,0 +1,405 @@
+{
+  "info": {
+    "name": "Document Approval System API",
+    "description": "Complete API testing collection for the Document Approval System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3001/api/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "health"]
+        },
+        "description": "Check if the server is running"
+      }
+    },
+    {
+      "name": "2. Upload File (Writer)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "test-files/sample-article.txt",
+              "description": "Upload a .txt, .md, or .docx file"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/upload",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "upload"]
+        },
+        "description": "Upload and parse a document file. Requires writer authentication."
+      }
+    },
+    {
+      "name": "3. Submit Article (Writer)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Getting Started with Node.js in 2026\",\n  \"content\": \"Node.js has revolutionized JavaScript development by enabling server-side programming. This comprehensive guide covers everything from basics to advanced concepts.\\n\\n## What is Node.js?\\n\\nNode.js is a runtime environment that allows JavaScript to run outside the browser...\\n\\n## Key Features\\n- Asynchronous & Event-Driven\\n- Fast Execution with V8 Engine\\n- Rich NPM Ecosystem\\n- Cross-Platform Support\",\n  \"imageReference\": null\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/submit",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "submit"]
+        },
+        "description": "Submit a new article. This creates a submission and sends an approval email to the manager."
+      }
+    },
+    {
+      "name": "4. Get Pending Submissions (Manager)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/submissions/pending",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "submissions", "pending"]
+        },
+        "description": "Get all submissions awaiting manager approval"
+      }
+    },
+    {
+      "name": "5. Get All Submissions (Manager)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/submissions",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "submissions"]
+        },
+        "description": "Get all submissions regardless of status"
+      }
+    },
+    {
+      "name": "6. Get Submissions by Status (Manager)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/submissions?status=approved",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "submissions"],
+          "query": [
+            {
+              "key": "status",
+              "value": "approved",
+              "description": "Options: pending, approved, rejected"
+            }
+          ]
+        },
+        "description": "Filter submissions by status (pending, approved, or rejected)"
+      }
+    },
+    {
+      "name": "7. Get Single Submission by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/submissions/1737205234567",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "submissions", "1737205234567"]
+        },
+        "description": "Get details of a specific submission by ID. Replace with actual submission ID from previous requests."
+      }
+    },
+    {
+      "name": "8. Approve Submission (Manager)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/approve?post_id=1737205234567",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "approve"],
+          "query": [
+            {
+              "key": "post_id",
+              "value": "1737205234567",
+              "description": "Submission ID to approve"
+            }
+          ]
+        },
+        "description": "Approve a submission and send confirmation email to writer. Replace post_id with actual submission ID."
+      }
+    },
+    {
+      "name": "9. Reject Submission (Manager)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/reject?post_id=1737205234567",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "reject"],
+          "query": [
+            {
+              "key": "post_id",
+              "value": "1737205234567",
+              "description": "Submission ID to reject"
+            }
+          ]
+        },
+        "description": "Reject a submission and send rejection email to writer. Replace post_id with actual submission ID."
+      }
+    },
+    {
+      "name": "10. Test: Submit with Image",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Understanding Async/Await in JavaScript\",\n  \"content\": \"Async/await makes asynchronous code look and behave more like synchronous code. This is the best way to handle promises in modern JavaScript.\\n\\n## The Problem with Callbacks\\nTraditional callbacks led to callback hell...\\n\\n## Benefits\\n- Cleaner, more readable code\\n- Better error handling\\n- Easier debugging\",\n  \"imageReference\": \"https://nodejs.org/static/images/logo.svg\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/submit",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "submit"]
+        },
+        "description": "Submit article with an image reference"
+      }
+    },
+    {
+      "name": "11. Test: Unauthorized Upload",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer INVALID_TOKEN",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": ""
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/upload",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "upload"]
+        },
+        "description": "Test authentication failure - should return 401"
+      }
+    },
+    {
+      "name": "0. Login as Writer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"writer@example.com\",\n  \"password\": \"writer123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "login"]
+        }
+      }
+    },
+    {
+      "name": "0. Login as Manager",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"manager@example.com\",\n  \"password\": \"manager123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3001/api/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "login"]
+        }
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/logout",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "logout"]
+        }
+      }
+    },
+    {
+      "name": "Get Me",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer YOUR_TOKEN_HERE"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:3001/api/me",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3001",
+          "path": ["api", "me"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001",
+      "type": "string"
+    },
+    {
+      "key": "writerPassword",
+      "value": "writer123",
+      "type": "string"
+    },
+    {
+      "key": "managerPassword",
+      "value": "manager123",
+      "type": "string"
+    }
+  ]
+}

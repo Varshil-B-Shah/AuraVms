@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Next.js build outputs
+.next/
+out/
+build/
+dist/
+
+# Production
+/build
+
+# Environment variables
+.env
+.env*.local
+.env.production
+.env.development
+
+# IDE/Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+/coverage
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Vercel deployment
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Turbo
+.turbo
+
+# Misc
+*.pem
+.contentlayer
+.turbo

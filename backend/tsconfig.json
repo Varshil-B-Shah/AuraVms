@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    // Project Structure
+    "outDir": "./dist",
+
+    // Module System
+    "module": "commonjs",
+    "target": "ES2020",
+    "lib": ["ES2020"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    // Type Checking
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Output
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Additional Options
+    "types": ["node", "jest"]
+  },
+  "include": ["src", "tests"],
+  "exclude": ["node_modules", "dist"]
+}
