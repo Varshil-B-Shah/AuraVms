@@ -4,12 +4,13 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+COPY tsconfig.json ./
 
 # Install dependencies
 RUN npm ci --only=production && npm cache clean --force
 
 # Copy source code
-COPY . .
+COPY src ./src
 
 # Build TypeScript
 RUN npm run build
